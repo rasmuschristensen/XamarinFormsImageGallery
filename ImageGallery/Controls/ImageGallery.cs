@@ -78,6 +78,7 @@ namespace ImageGallery.Controls
 					}
 					if (args.OldItems != null) {
 						// not supported
+						_imageStack.Children.RemoveAt (args.OldStartingIndex);
 					}
 				};
 			}
