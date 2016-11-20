@@ -82,15 +82,7 @@ namespace ImageGallery.Controls
 					}
 				};
 			}
-
-//			_imageStack.Children.Clear ();
-//			foreach (var item in ItemsSource) {
-//				var view = (View)ItemTemplate.CreateContent ();
-//				var bindableObject = view as BindableObject;
-//				if (bindableObject != null)
-//					bindableObject.BindingContext = item;
-//				_imageStack.Children.Add (view);
-//			}				
+				
 		}
 
 		public DataTemplate ItemTemplate {
