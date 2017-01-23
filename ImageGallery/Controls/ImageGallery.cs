@@ -1,5 +1,4 @@
-﻿using System;
-using Xamarin.Forms;
+﻿using Xamarin.Forms;
 using System.Collections;
 using System.Collections.Specialized;
 using System.Collections.Generic;
@@ -7,7 +6,7 @@ using System.Linq;
 
 namespace ImageGallery.Controls
 {
-	public class ImageGallery : ScrollView
+    public class ImageGallery : ScrollView
 	{
 		readonly StackLayout _imageStack;
 
@@ -26,12 +25,15 @@ namespace ImageGallery.Controls
 
 
         public static readonly BindableProperty ItemsSourceProperty =
-            BindableProperty.Create(nameof(ItemsSource), typeof(IList), typeof(ImageGallery),
+            BindableProperty.Create(
+                nameof(ItemsSource), 
+                typeof(IList), 
+                typeof(ImageGallery),
                 default(IList),
                 BindingMode.TwoWay,
-                propertyChanging: (bindableObject, oldValue, newValue) =>
+                propertyChanging: (bindable, oldValue, newValue) =>
                 {
-                    ((ImageGallery)bindableObject).ItemsSourceChanging();
+                    ((ImageGallery)bindable).ItemsSourceChanging();
                 },
                 propertyChanged: (bindableObject, oldValue, newValue) =>
                 {
@@ -126,8 +128,8 @@ namespace ImageGallery.Controls
             set => SetValue(SelectedIndexProperty, value);
         }
 
-        void UpdateSelectedItem() => SelectedItem = 
-            SelectedIndex > -1 ? Children[SelectedIndex].BindingContext : null;
+        void UpdateSelectedItem() => 
+            SelectedItem = SelectedIndex > -1 ? Children[SelectedIndex].BindingContext : null;
     }
 }
 
