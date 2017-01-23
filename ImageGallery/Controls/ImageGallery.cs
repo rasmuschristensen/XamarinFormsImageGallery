@@ -1,5 +1,4 @@
-﻿using System;
-using Xamarin.Forms;
+﻿using Xamarin.Forms;
 using System.Collections;
 using System.Collections.Specialized;
 using System.Collections.Generic;
@@ -7,7 +6,7 @@ using System.Linq;
 
 namespace ImageGallery.Controls
 {
-	public class ImageGallery : ScrollView
+    public class ImageGallery : ScrollView
 	{
 		readonly StackLayout _imageStack;
 
@@ -22,35 +21,29 @@ namespace ImageGallery.Controls
 			this.Content = _imageStack;
 		}
 
-		public IList<View> Children {
-			get {
-				return _imageStack.Children;
-			}
-		}
+        public IList<View> Children => _imageStack.Children;
 
 
-		public static readonly BindableProperty ItemsSourceProperty =
-			BindableProperty.Create<ImageGallery, IList> (
-				view => view.ItemsSource,
-				default(IList), 
-				BindingMode.TwoWay,
-				propertyChanging: (bindableObject, oldValue, newValue) => {
-					((ImageGallery)bindableObject).ItemsSourceChanging ();
-				},
-				propertyChanged: (bindableObject, oldValue, newValue) => {
-					((ImageGallery)bindableObject).ItemsSourceChanged (bindableObject, oldValue, newValue);
-				}
-			);
+        public static readonly BindableProperty ItemsSourceProperty =
+            BindableProperty.Create(
+                nameof(ItemsSource), 
+                typeof(IList), 
+                typeof(ImageGallery),
+                default(IList),
+                BindingMode.TwoWay,
+                propertyChanging: (bindable, oldValue, newValue) =>
+                {
+                    ((ImageGallery)bindable).ItemsSourceChanging();
+                },
+                propertyChanged: (bindableObject, oldValue, newValue) =>
+                {
+                    ((ImageGallery)bindableObject).ItemsSourceChanged(bindableObject, (IList)oldValue, (IList)newValue);
+            });
 
-		public IList ItemsSource {
-			get {
-				return (IList)GetValue (ItemsSourceProperty);
-			}
-			set {
-
-				SetValue (ItemsSourceProperty, value);
-			}
-		}
+        public IList ItemsSource {
+            get => (IList)GetValue(ItemsSourceProperty);
+            set => SetValue(ItemsSourceProperty, value);
+        }
 
 		void ItemsSourceChanging ()
 		{
@@ -70,10 +63,9 @@ namespace ImageGallery.Controls
 						foreach (var newItem in args.NewItems) {
 
 							var view = (View)ItemTemplate.CreateContent ();
-							var bindableObject = view as BindableObject;
-							if (bindableObject != null)
-								bindableObject.BindingContext = newItem;
-							_imageStack.Children.Add (view);
+                            if (view is BindableObject bindableObject)
+                                bindableObject.BindingContext = newItem;
+                            _imageStack.Children.Add (view);
 						}
 					}
 					if (args.OldItems != null) {
@@ -90,24 +82,22 @@ namespace ImageGallery.Controls
 			set;
 		}
 
-		public static readonly BindableProperty SelectedItemProperty =
-			BindableProperty.Create<ImageGallery, object> (
-				view => view.SelectedItem,
-				null,
-				BindingMode.TwoWay,
-				propertyChanged: (bindable, oldValue, newValue) => {
-					((ImageGallery)bindable).UpdateSelectedIndex ();
-				}
-			);
+        public static readonly BindableProperty SelectedItemProperty =
+              BindableProperty.Create(
+                  nameof(SelectedItem), 
+                  typeof(object), 
+                  typeof(ImageGallery),
+                  null,
+                  BindingMode.TwoWay,
+                  propertyChanged: (bindable, oldValue, newValue) => {
+                      ((ImageGallery)bindable).UpdateSelectedIndex();
+                  }
+              );
 
-		public object SelectedItem {
-			get {
-				return GetValue (SelectedItemProperty);
-			}
-			set {
-				SetValue (SelectedItemProperty, value);
-			}
-		}
+        public object SelectedItem {
+            get => GetValue(SelectedItemProperty);
+            set => SetValue(SelectedItemProperty, value);
+        }
 
 		void UpdateSelectedIndex ()
 		{
@@ -121,29 +111,25 @@ namespace ImageGallery.Controls
 
 		}
 
-		public static readonly BindableProperty SelectedIndexProperty =
-			BindableProperty.Create<ImageGallery, int> (
-				carousel => carousel.SelectedIndex,
-				0,
-				BindingMode.TwoWay,
-				propertyChanged: (bindable, oldValue, newValue) => {
-					((ImageGallery)bindable).UpdateSelectedItem ();
-				}
-			);
+        public static readonly BindableProperty SelectedIndexProperty =
+            BindableProperty.Create(
+                nameof(SelectedIndex),
+                typeof(int),
+                typeof(ImageGallery),
+                0,
+                BindingMode.TwoWay,
+                propertyChanged: (bindable, oldValue, newValue) =>
+                {
+                    ((ImageGallery)bindable).UpdateSelectedItem();
+                });
 
-		public int SelectedIndex {
-			get {
-				return (int)GetValue (SelectedIndexProperty);
-			}
-			set {
-				SetValue (SelectedIndexProperty, value);
-			}
-		}
+        public int SelectedIndex {
+            get => (int)GetValue(SelectedIndexProperty);
+            set => SetValue(SelectedIndexProperty, value);
+        }
 
-		void UpdateSelectedItem ()
-		{
-			SelectedItem = SelectedIndex > -1 ? Children [SelectedIndex].BindingContext : null;
-		}
-	}
+        void UpdateSelectedItem() => 
+            SelectedItem = SelectedIndex > -1 ? Children[SelectedIndex].BindingContext : null;
+    }
 }
 

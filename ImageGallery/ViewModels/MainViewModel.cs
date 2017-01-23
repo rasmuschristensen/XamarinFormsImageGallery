@@ -24,22 +24,16 @@ namespace ImageGallery.ViewModels
 		{			
 		}
 
-		public ObservableCollection<GalleryImage> Images {
-			get { return _images; }
-		}
+        public ObservableCollection<GalleryImage> Images => _images;
+        public ImageSource PreviewImage {
+            get => _previewImage;
+            set => SetProperty(ref _previewImage, value);
+        }
 
-		public ImageSource PreviewImage {
-			get{ return _previewImage; }
-			set {
-				SetProperty (ref _previewImage, value);
-			}
-		}
+        public ICommand CameraCommand => _cameraCommand ?? 
+            new Command(async () => await ExecuteCameraCommand(), () => CanExecuteCameraCommand());
 
-		public ICommand CameraCommand {
-			get { return _cameraCommand ?? new Command (async () => await ExecuteCameraCommand (), () => CanExecuteCameraCommand ()); }
-		}
-
-		public bool CanExecuteCameraCommand ()
+        public bool CanExecuteCameraCommand ()
 		{
 			if (!CrossMedia.Current.IsCameraAvailable || !CrossMedia.Current.IsTakePhotoSupported) {
 				return false;
@@ -74,16 +68,14 @@ namespace ImageGallery.ViewModels
 			return;
 		}
 
-		public ICommand PreviewImageCommand {
-			get {
-				return _previewImageCommand ?? new Command<Guid> ((img) => {
+        public ICommand PreviewImageCommand => _previewImageCommand ?? 
+            new Command<Guid>((img) =>
+            {
 
-					var image = _images.Single (x => x.ImageId == img).OrgImage;
+                var image = _images.Single(x => x.ImageId == img).OrgImage;
 
-					PreviewImage = ImageSource.FromStream (() => new MemoryStream (image));
+                PreviewImage = ImageSource.FromStream(() => new MemoryStream(image));
 
-				});
-			}
-		}
-	}
+            });
+     }
 }
