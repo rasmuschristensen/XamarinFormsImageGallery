@@ -63,27 +63,31 @@ namespace ImageGallery.Controls
 			if (ItemsSource == null)
 				return;
 
+            if (newValue != null && newValue.Count > 0)
+                UpdateView(newValue);
+
 			var notifyCollection = newValue as INotifyCollectionChanged;
 			if (notifyCollection != null) {
-				notifyCollection.CollectionChanged += (sender, args) => {
-					if (args.NewItems != null) {
-						foreach (var newItem in args.NewItems) {
-
-							var view = (View)ItemTemplate.CreateContent ();
-							var bindableObject = view as BindableObject;
-							if (bindableObject != null)
-								bindableObject.BindingContext = newItem;
-							_imageStack.Children.Add (view);
-						}
-					}
-					if (args.OldItems != null) {
-						// not supported
-						_imageStack.Children.RemoveAt (args.OldStartingIndex);
-					}
-				};
+				notifyCollection.CollectionChanged += (sender, args) => { UpdateView(args.NewItems); };
 			}
 				
 		}
+
+		private void UpdateView(IList newItems)
+        {
+            if (newItems != null)
+            {
+                foreach (var newItem in newItems)
+                {
+                    var view = (View)ItemTemplate.CreateContent();
+                    if (view is BindableObject bindableObject)
+                    {
+                        bindableObject.BindingContext = newItem;
+                    }
+                    _imageStack.Children.Add(view);
+                }
+            }
+        }
 
 		public DataTemplate ItemTemplate {
 			get;
